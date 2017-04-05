@@ -1,0 +1,155 @@
+/usr/share/vim/vim61/vimrc_example.vim
+======================================
+Use this global file from the distrib as a launchpad
+
+
+Setting the Default editor
+==========================
+In ~/.bashrc [make sure ~/.bash_profile calls ~/.bashrc]
+
+EDITOR=vim
+VISUAL=$EDITOR
+export EDITOR VISUAL
+
+.exrc                                             LDUP: 04/Apr/2k3
+------
+:scriptnames
+set ruler	Sets the status line
+set showmode	Sets the indicator modes
+set nonu	Set numbering of lines
+set noai	Set autoindenting
+set lm=8	Sets the left margin
+set tw=72 	Sets the text width ie the right margin becomes 8 
+                (distance from the left side of the screen at which the text
+                will wrap). (I arbitrarily chose 8 and 72 for this. You should
+                normally set 'wm' or 'tw' ==> but not both. <==
+set wm=8        Set the wrap margin (distance from the right side of the 
+                screen at which the text will wrap) 
+set ts=8	Sets the tab stop. This is the default
+set incsearch   Set up an incremental search
+set nohlsearch  
+
+                     VIM keyboard Mappings
+                     =====================
+
+:map                          Show all mappings
+:map <F5> :wq<CR>
+:unmap <F5>
+
+:map <F6> <ESC>ZZ
+:map <F7> i{<ESC>ea}<ESC>
+
+:help                   General Help
+:help quickref          To go directly to a topic
+:help tutor
+:help usr_06.txt
+
+:help vimrc             Search for a particular term and bring up a list
+                        of choices.
+                        Press ^d to continue
+			and choose the one you want 
+:help CTRL-V
+:help F5
+:help /b
+
+:set all                Show all set options 
+:help options 
+
+
+EXAMPLE:
+=======
+
+:map <F3> :runtime! syntax/2html.vim
+
+Now hit F3 key
+
+EXAMPLE:
+=======
+
+:map <F3> i<B><Esc>ea</B><Esc>a
+
+Now type some word, say, Vashi
+In command mode, with the cursor before "V"
+hit F3 key
+
+An HTML tag is inserted aroound Vashi
+and your are left in insert mode to continue
+typing
+
+
+
+Bookmarks
+=========
+ma
+`a
+
+`0
+`1
+`2
+
+:marks
+
+                               Sessioning 
+                               ==========
+1. vi /etc/hosts      
+
+   :sp[lit] 
+   :e /etc/sysconfig/network
+   :vsp /~
+   :e /etc/sysconfig/network-scripts/ifcfg-eth0  
+                         Use ^w twice to jump around
+			 Use ^w + and - to resize
+
+			 
+   :wall | !qall            Wrile all changed files at once
+   :mksession vada
+   :qall
+
+   Now open the session with :
+
+2. vi -S vada   
+
+To go to another session without exiting vi :
+
+   :wall             Wrile all changed files at once
+   :mksession! vada
+   :source pav       Will load another session "pav"
+
+
+                                Abbreviations 
+                                =============
+
+1. :ab v vashi    On typing r, it is instantly replaced by vashi
+                  Permanent : put in .exrc
+
+   :ab            To see all abbreviates    
+    
+   :unab v        Unabbreviate v 
+
+   :abcl[ear]     Clear all abbreviations
+
+
+:so[urce] /usr/share/vim/vim61/macros/life/life.vim
+ Type g to go
+ Conway's Game of Life
+
+
+                                Spelling Checker [aspell]
+				and vi
+				# aspell -c filename
+                                ====================
+
+1. Put the following line in .exrc :
+
+   map  :w!<CR>:!aspell check %<CR>:e! %<CR>
+
+Note: Press ^v^t to get the ^T 
+
+   Spell check a doc with ^t
+
+============================================
+Jitendra More
+OculusIT
+9833550438
+
+==========================================

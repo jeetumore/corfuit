@@ -1,0 +1,148 @@
+                     The Pictorial LBP [FC]
+		     ======================
+		     by Jitendra More
+		     
+
+power on
+   |
+rom bios
+   | 	    {boot strapping}
+post
+   |
+cmos
+   |	    {1st stage of boot loading}
+mbr
+   |
+LILO
+   |----------------
+		   |--> prompt
+   |		   |--> timeout
+		   |--> default
+   |		   |--> ......
+		   |--> install- /boot/boot.b	{2nd stage of boot loading}
+		   _________________|_____________________
+   |		   |		      |			  |
+		/boot/map	 /boot/message	      /boot/System.map
+		/boot/boot.0300 /boot/boot.0800 
+   |
+		   |__________________|___________________|
+   |				       |
+   |<----------------------------------|
+ Linux Kernel 
+/boot/vmlinuz-2.4.20-8	un-comparc'd by LILO
+   |
+init daemon
+{ /sbin/init }
+   |------------> /etc/inittab
+		    |------------> default runlevel
+		    |------------> /etc/rc.d/rc.sysinit { as a sub-shell }
+   |				   |
+		    |		   |--> /etc/sysconfig/network
+				   |--> /etc/init.d/functions {same env}
+   |		    |			    |
+					    |
+		    |			    |--> global umask
+   |					    |--> global PATH
+		    |			    |--> defines 17 shell functions
+						 { success
+   |		    |				   failure
+						   passed
+		    |				   warning
+   |						   echo_success
+		    |				   echo_failure
+						   echo_passed
+   |		    |				   echo_warning
+						   killproc
+		    |				   pidofproc
+   |						   pidfileofproc
+		    |				   action
+						   checkpid
+   |		    |				   confirm
+						   status
+		    |				   strstr
+   |						   daemon }
+		    |			    |--> .........
+				   |--> /etc/redhat-release
+   |		    |		   |--> /bin/dmesg - /var/log/dmesg
+
+		    |------------> /etc/rc.d/rc	      { as a subshell }
+   |				   |
+		    |		   |--> checks runlevel { function }
+				   |--> finding previous runlevel
+   |		    |		   |--> /etc/init.d/functions {same env}
+				   |--> checks user confirmation mode
+		    |		   |--> setting new runlevel
+   |				   |--> checks /etc/rc.d/rc$runlevel.d exists?
+		    |		   |--> /etc/rc.d/rc3.d/k*
+					|--> /etc/init.d/functions {same env}
+   |		    |		   |	|--> 5 functions,used only stop
+					     { start
+		    |		   |	       stop
+   |					       restart
+		    |		   |	       status
+					       condrestart }
+   |		    |		   |--> /etc/rc.d/rc3.d/s*
+				   |--> /etc/init.d/functions {same env}
+		    |			|--> 5 functions , used only start
+   |				   |--> /etc/rc.d/rc.local
+		    |
+		    |------------> update is run {bdflush}in RH8.
+		                   Now part ofthe /sbin/init in RH9.
+		    |------------> shutdown CAD magic keys are set
+				   /sbin/shutdown -t3 -r now
+   |		    |------------> poweroff considerations
+				   /sbin/shutdown -f -h +2
+		    |------------> poweron considerations
+   |				   /sbin/shutdown -c
+		    |------------> 6 mingettys are spawned with tty? dev drvs
+				   all enter sleep state except one
+   |				   1:2345:respawn:/sbin/mingetty tty1
+		    |------------> IF runlevel 5 Then
+				   /etc/X11/predfm -nodaemon
+   |
+   |---------> first mingetty
+	       |--> loads /dev/tty1
+	       |--> /etc/issue
+   |	       |--> /bin/login
+		    |--> /usr/bin/passwd
+	       |--> puts login daemon in sleep state
+	       |--> $USER/.hushlogin exists ? Ja! mail,motd,lastlog NOT RUN!   
+   |	       |--> /etc/motd
+               |--> lastlog* using /var/log/lastlog
+               |--> Checks user's mail - /var/spool/mail/$USER
+	       |--> wakes the /bin/login process which forks off as
+		    independent application daemon & goes to Zombie state.
+   |		    |
+		    |--> /bin/bash
+			  |	|--> puts login to sleep state
+   |			  |
+			  |--> /etc/profile { sets HISTSIZE , PATH etc }
+				  |--> /etc/inputrc {sets keyboard mappings}
+   |				  |--> /etc/termcap {sets term. capabilities}
+				  |--> /etc/profile/*.sh { 13 files }
+							 { colorls.sh
+							   vim.sh
+   |							   glib2.sh 
+                                                           gnome-ssh-askpass.sh
+							   krb5.sh
+   |							   lam.sh
+							   lang.sh
+							   less.sh
+   |							   mc.sh
+							   pvm.sh
+							   qt.sh
+   |							   vim.sh
+							   which-2.sh
+							   xpvm.sh }
+   |
+   |-----------------------------> /etc/bashrc
+   |-----------------------------> /root/.bash_profile
+   |-----------------> /root/.bashrc
+   |-----------------> /root/.bash_history
+   |-----------------> /root/.bash_logout
+
+Finally, the bash shell login prompt. 
+To explore Linux & know it better as never before.
+
+                            **************
+

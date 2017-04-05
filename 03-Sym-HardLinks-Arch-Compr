@@ -1,0 +1,266 @@
+
+********************************************************************************
+============================================
+Jitendra More
+OculusIT
+9833550438
+
+==========================================
+
+********************************************************************************
+
+
+		SYMLINKS , HARDLINKS , PARTITIONS , COMPRESSION
+
+
+1.)	Partition is a part of hard disk which is to be utilized for a different
+	cause than it's neighbouring partition.
+
+2.)	Partition is "Hardware" since it comes from a hard disk which is a
+	hardware . Basically anything can be holded in hands is a hardware
+	, and as hard disk could be , hard disk and hence partition is a h/w.
+
+3.)	Partitions could be further subdidvided into two types -:
+
+i.)	Primary Partitions -> It is an actual partition which can be given a
+	label and can be used for some purpose. There can be max 4 primary
+	partitions on a hard disk ( limitations of BIOS which was first
+	inroduced by IBM and all other personal computers are it's clones.
+
+ii.)	Extended Partition -> This is ideally not a partition but a concept
+	that can be further divided into logical partitions which can be
+	further given labels and used for some purpose.
+
+4.)	Only 1 extended partition can be created from a hard disk which can be
+	further sub divided to 64 logical volumes ( partitions ) . Windows
+	allows only 21 logical partitions.
+
+	Max. Number of logical volumes also depends on motherboard . In some
+	cases only 16 logical volumes are allowed from an extended partition.
+
+5.)	Windows can oly be installed on an primary , active partition.
+
+6.)	Drive in Windows = Filesystem in Linux
+
+7.)	Normally the important directories which if filled could hamper the
+	functioning of system are made a totally different filesystem on a
+	different partition in linux.
+
+	Normally , the various directories which are given different partitions
+	are /boot , / , /home , /tmp , /var , /usr .
+
+	For eg. -> /home is the directory in which all users have their home
+	directories , if there is no quota policy for users in place , in
+	case they dump more and more data in their home directories and if
+	/home is not in another partition , all data will be going into the
+	"/" directory and ultimately it gets filled up . This will make the
+	system slow and ultimately system may hang and will give problems
+	later while booting.Even the root user will not be able to login
+	because his home directory ( /root ) is in / directory which is
+	already full.
+
+	To slove above problem , root user can login from linux rescue mode
+	and try to do the cleanup.
+
+8.)	'df' is command used to see all filesystems present on the system and
+	being used by linux kernel and their current usage.
+
+	df -h gives the output in human readable form ( in MB's )
+
+		For eg. ->	df -h
+	Filesystem            Size  Used Avail Use% Mounted on
+	/dev/hda7             950M  116M  786M  13% /
+	/dev/hda6              99M  9.2M   85M  10% /boot
+	none                  109M     0  109M   0% /dev/shm
+	/dev/hda10            950M   17M  885M   2% /tmp
+	/dev/hda12            8.3G  4.5G  3.5G  57% /usr
+	/dev/hda11            950M  263M  639M  30% /var
+	/dev/vg/lv            465M  8.1M  433M   2% /home
+
+9.)	Minimum 3 partitions required for a successful installation
+
+	/boot , / , swap
+
+10.) 	7 Partitions required for a successful and efficient linux installation
+
+	/boot , / , /home , swap , /tmp , /var , /usr
+
+11.)	For getting an optimum performance from a system , no partition should
+	be filled more than 82% of it's size.
+
+12.)	Link is a type of shorcut which is used to point out to files in
+	locations which involve typing a long path to access them.
+
+	A Link can further subdivided into Synlink and Hardlink.
+
+13.)	Symlink / Symbolic Link / Softlink
+
+	It is a shortcut as mentioned above.
+
+	It can be created using the "ln -s" command
+
+			ln -s TARGET LINK_NAME
+
+	For eg ->	ln -s /usr/bin/clear /sbin/c
+
+	Above command will create a symlink "c" in location /sbin which is
+	pointing to a file ( actually binary ) "clear" in /usr/bin. This comes
+	in handy for typing only c to clear the screen.
+
+	Links can be used for backward compatibilty between softwares.
+
+
+14.)	Hardlink
+
+	It is also a shortcut as mentioned in links defination.
+
+	It can be created using the "ln" command
+
+                        ln TARGET LINK_NAME
+
+15.)	Properties of Softlink and Hardlink
+
+				SoftLink
+
+i.) 	It is a shortcut.
+
+ii.)	Size of symlink has no relation with size of the file it is pointing to
+	,instead the size of symlink depends on the characters in the path
+	of the TARGET link name.
+
+iii.)	Symlinks can cross partitions.
+
+iv.)	On deleting symlinks , parent file does not get affected.
+
+v.)	On deleting the parent file , the symlink becomes an orphan symlink.
+
+
+
+				Hardlink
+
+i.)	Size of Hardlink is the same as Parent / TARGET file name.
+
+ii.)	Hardlinks cannot cross partitions.
+
+iii.)	It is a shorcut to parent item.
+
+iv.)	In case parent gets deleted , hardlink still exists.
+
+
+16.)	Compression is a technique to reduce the size of bunch of files
+	stacked together.
+
+	It has 2 steps -:
+
+i.) 	Archiving
+
+ii.)	Compression
+
+
+17.)				Archiving
+
+	This is a process of collecting the files which have to
+	be compressed and make a single file out of them i.e an "archive".
+
+	An archive is made using "tar" ( Tape Archive Command )
+
+			tar -cvf large.tar *
+			     |||
+			     || File Name
+			     ||
+			     ||
+			     |Show Verbose Output
+			     |
+			     Create A Single File
+
+	Above Command Makes an archive "large.tar" and puts all the files in
+	in current directory in it.
+
+18.)				Compression
+
+	There are various tools to compress the file . They are as follows -:
+
+
+i.)	Compress and Uncompress Tool
+
+			compress large.tar
+
+	Above command makes a compressed file large.tar.Z in the current
+	directory.
+
+	To uncompress the file uncompress tool is used
+
+			uncompress large.tar.Z
+
+	A shorcut command to do the compressing is ( Archiving + Compression )
+
+			tar -Zcvf large.tar.Z
+
+	A shorcut command to do the uncompressing is ( Archiving + Compression )
+
+                        tar -Zxvf large.tar.Z
+
+
+ii.)    GZIP and GUNZIP Tool
+
+                        gzip large.tar
+
+        Above command makes a compressed file large.tar.z in the current
+        directory.
+
+        To uncompress the file gunzip tool is used
+
+                        gunzip large.tar.z
+
+        A shorcut command to do the compressing is ( Archiving + Compression 
+)
+
+                        tar -zcvf large.tar.z
+
+        A shorcut command to do the uncompressing is ( Archiving + Compression )
+
+			tar -zxvf large.tar.z
+
+iii.)    BZIP2 and BUNZIP2 Tool
+
+                        bzip2 large.tar
+
+        Above command makes a compressed file large.tar.bz2 in the current
+        directory.
+
+        To uncompress the file bunzip2 tool is used
+
+                        bunzip2 large.tar.bz2
+
+        A shorcut command to do the compressing is ( Archiving + Compression 
+)
+
+                        tar -jcvf large.tar.bz2
+
+        A shorcut command to do the uncompressing is ( Archiving + Compression )
+
+			tar -jxvf large.tar.bz2
+
+19.)	When binary comes into RAM , it is called a DAEMON.
+
+	Each Process when comes in RAM , is assigned a unique number known
+	as Process ID ( or PID ).
+
+
+20.)		Application Daemon or SERVER
+
+i.)	User starts the process , it becomes a server , and user ultimately
+	stops it.
+
+ii.)	System will not crash if this process stops.
+
+
+21.)            System Daemon or KERNEL THREAD
+
+i.)    System starts the process , it becomes a kernel thread , and ultimately
+	system only stops it.
+
+ii.)   System will crash if this process stops.
+
+
+

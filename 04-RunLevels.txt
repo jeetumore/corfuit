@@ -1,0 +1,28 @@
+1. /etc/rc3.d/S85gpm restart
+2. /etc/rc.d/rc3.d/S85gpm restart
+3. /etc/init.d/gpm restart          
+4. /etc/rc.d/init.d/gpm restart
+5. service gpm restart
+
+
+1. /etc/rc3.d/K15gpm restart
+2. /etc/rc.d/rc3.d/K15gpm restart
+
+1. /etc/init.d/gpm restart               BSD Unix way 
+2. /etc/rc.d/init.d/gpm restart          SV/AT&T   Pure Linux way
+
+1. service gpm restart                   The Red Hat Linux way
+2. cd /etc/rc.d/init.d
+   ./gpm restart
+
+Links 
+
+/etc/init.d/  <->   /etc/rc.d/init.d/
+
+/etc/rc3.d/ <->  /etc/rc.d/rc3.d/
+
+
+/etc/rc3.d/K15gpm <->  /etc/rc.d/rc3.d/K15gpm 
+       both point to /etc/init.d/gpm
+       Actual : /etc/rc.d/init.d/gpm
+

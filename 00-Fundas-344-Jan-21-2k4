@@ -1,0 +1,957 @@
+                                  GNU/Linux         LDUP:22nd-Jan-2k4
+	                    Mid-WayThru Test  01
+
+                           ========================
+			    Part 0 - Installation
+                           ========================
+
+1. How many CDs do the GNU/Linux binaries come on ? 
+
+2. How many partitioning options are there in Linux? What are they?
+ 
+3. How many partitioning tools are there in Linux? What are they? 
+
+4. Differentiate between them ? 
+
+5. How many Types of Install are there in Linux? 
+
+6. How many Classes of Install are there in Linux? 
+
+7. Explain the differences between them?
+
+8. Can Linux boot a foreign OS ? 
+
+9. Expand LILO ? 
+
+10. Expand GRUB ? 
+
+11. Expand LBA ? 
+
+12. How many Primary Partitions can PC Motherboards support ? 
+
+13. How many Extended Partitions can PC Motherboards support ? 
+
+14. How many Logical Partitions can PC Motherboards support ? 
+
+15. Can there be Logical Partitions without an Extended one? 
+
+16. Can there be an Extended Partition without any Logical ones? 
+
+17. How many places can one install a Boot Loader in Linux? 
+
+18. Can one do without installing a BootLoader? 
+
+19. Then how would you boot linux ?
+
+20. When does one enable the LBA option ? 
+
+21. Are MD5 and shadow passwords enabled by default ?
+
+22. How many Indian Languages does Linux support? 
+
+23. Name them 
+
+24. Is MD5 and shadow password support enabled by default? 
+
+25. What is the min size of a Linux Install? 
+
+26. What is the max size of a Linux Install? 
+
+27. What are the min partitions reqd for a successful Linux install? 
+
+28. Then in which partition are most of the pkgs on the 3 linux CDs installed ?
+
+29. What are the std partitions reqd for a successful Linux install? 
+
+30. Then in which partition are most of the pkgs on the 3 linux CDs installed ?
+
+31. What is the id of a Linux Partition? 
+
+32. What is the id of a swap Partition? 
+
+33. What is the id of a Win NT Partition? 
+
+34. What is the id of a Linux Extended Partition? 
+
+35. What is the id of a Windows Extended Partition? 
+
+36. Why are there 2 types of Extended Partitions, like above?
+
+37. Explain the following cmds in Linux fdisk ? n, d, l, t, w, x, m, r
+
+38. How do u access fdisk in RHL9? How do u get back to normal GUI mode later? 
+
+39. What time zone do we choose in India? 
+
+40. Expand UTC? What is it's more common name? 
+
+41. The graphic associated with installation of the C compiler and tools is 
+
+42. The graphic associated with installation of the kernel source C code is 
+
+43. You don't have enough space in your /usr partition for a full install. 
+    What would you then do ?
+
+44. How much space does your install now need ?
+
+45. Still space constraints. Now what ? 
+
+46. How much space does this need now ?
+
+47. What is the third partition of the secondary master IDE interface called? 
+
+48. CDROM is connected to the IDE PCI Sec slave. What would it be in Linux? 
+
+49. If a CDROM was connected to the SCSI Sec slave what would it be in Linux? 
+
+50. Which file stores all the pkg installed in Linux, which were chosen by you? 
+
+51. Which installation type of the following is supported by GUI :
+
+	a. FTP
+	b. HTTP
+	c. NFS
+	d. SMB	
+
+52. Which of the foll is installed by Server and not by Workstation or DeskTop?
+
+	a. Anonymous FTP
+	b. Multimedia Support
+	c. NFS server
+	d. SSH server
+
+53. How much max swap can Linux use:
+
+	a. 512 MB
+	b. 1GB
+	c. 4GB
+	d. 8GB
+
+54. To create a Linux boot floppy you would use :
+
+	a. autoboot
+	b. dd
+	c. pcmcia
+	d. rawrite
+
+55. Which of the following are RH installation modes:
+
+	a. Expert
+	b. Graphical
+	c. Text
+	d. Upgrade
+
+56. Why would you use expert mode ?
+
+	a. To impress friends
+	b. Omit device probes
+	c. Specify boot parameters
+	d. Support network installation
+
+57. Which of the following installation functions are optional
+
+	a. Partitioning
+	b. Network configuration
+	c. Setting the time zone
+	d. Authentication configuration
+
+58. Which of the following is true of a 2-button mouse?
+
+	a. It is bus mouse
+	b. It is a PS/2 mouse
+	c. It is a serial mouse
+	d. You should enable 3-button emulation for a 2-button mouse
+
+59. What is a mount point?
+
+	a. The device file associated with a removable device
+	b. The directory associated with a mountable device
+	c. The side of a floppy disk inserted onto the drive
+	d. The time at which you insert the installation media
+
+60.  Explain any 3 of the following briefly:
+
+	a. nothing
+	b. L
+	c. LI
+	d. LIL
+	e. LIL?
+	f. LIL-
+	g. LILO
+
+61.  What must the LILO config for a non-Linux partition include?
+
+	a. The image option
+	b. The label option
+	c. The other option
+	d. The root option
+
+62.  What should you type at the LILO prompt to start a KS installation that 
+     fetches the kickstart file from a DHCP server?
+
+	a. linux ks
+	b. linux ks=dhcp
+	c. linux ks=floppy
+	d. linux ks=network
+
+63.  How would you backup the MBR to a file mbr-bakup?
+
+
+64.  What is the cmd to configure :
+
+	a. Keyboard
+	b. Mouse
+	c. Sound card
+	d. X
+	e. Firewall
+	f. NIS server and domain
+	g. System Time
+	h. CMOS clock
+
+                ============================================
+		PART I - BASICS AND COMMANDS - 235 Questions
+                ============================================
+
+                        ============================
+			01-02. Files and Directories
+                        ============================
+
+65. What is the alias for the ll cmd ?
+
+66. How would you see all files in a dir except for hidden ones ? 
+
+67. How would you see all hidden files only in a dir ? 
+
+68. How would you recursively list all files and dirs of the entire Linux FS ? 
+
+69. The ls cmd has an equivalent. Whats it and the diff between the two ?
+
+70. The ls -l cmd has an equivalent. Whats it and the diff between the two ?
+
+71. Name 3 things that the 'wc' command can count ? 
+
+72. What cmd would you use to count the number of files in a directory ? 
+
+73. What cmd would you use to count the number of words in 'file1' ?	
+
+74. What cmd would you use to count the number of characters in file1 ?  
+
+75. There is another similar option to do the above. What is it ?  
+
+76. How would you see the number of inodes used on the /home partition ? 
+
+77. Which cmd is used to find the location of the parent file to a symlink in 
+    a hierarchical manner? 
+
+78. Which file would you think of if you wished to change the color of your 
+    directories or files ? 
+
+79. How would you rename file1 to file2 ?
+
+80. How would you delete file1 ?
+
+81. Will it ask for confirmation if root deletes file1 ?
+
+82. Will it ask for confirmation if foo deletes file1 ?
+
+83. How would I be able to delete file1 without confirmation temporarily ?
+
+84. Permanently?
+
+85. How would you delete a directory called /vadapav ?
+
+86. But it does not do it. Why?
+
+87. Any quick way?
+
+88. How would you delete and destroy the entire contents of your HDD using the 
+    rm cmd?
+
+89. What would you do to copy a file to another without confirmation?
+
+90. I wish to make a bakup of the entire contents of dir /vashi to /nerul. How?
+
+91. The above cmd is a shortened version of many options ? What are they ?
+
+92. The 'cd' cmd has 2 purposes. What are they?
+
+93. The 'touch' cmd does two things. What are they?
+
+94. Why would you want to use this cmd?
+
+95. Explain the advantages of symlinks ?
+
+96. And disadvantages ?
+
+97. Explain the advantages of hardlinks ?
+
+98. And disadvantages ?
+
+99. Will this command work ?  # mkdir /vada/pav/idli
+
+100. Well.....
+
+101. What is this '-p'?
+
+102. The above cmd has an equivalent. What is it? 
+
+103. How would you recursively copy all files/dirs on a mounted floppy to 
+     local directory /usr/local/? 
+
+
+                         =========================
+	                     03. Date and Time
+                         =========================
+
+104. How would you know the date or the time on our system ?
+
+105. I wish to change my system date to 29 Apr 2003. How ?  
+
+106. What cmd would update the system clock from the CMOS clock? 
+
+107. Is there any GUI tool to handle dates ?
+
+108. Is there a GUI calculator in Linux ?
+
+109. Is there a CLI calculator in Linux ?
+
+110. How would you know what DAY it was on Jan 01 2000 ?  
+
+111. Which cmd tells you how long the system has been up since the last reboot? 
+
+                        ===========================  
+			04 a/b. Archiving Utilities
+                        ===========================
+
+112. What is an archive ?
+
+113. What cmd is used to create an archive ? 
+
+114. What does it expand to ? 
+
+115. How would you create an archive 'test' of all files in the current dir ? 
+
+116. How would you compress the above archive with :
+
+	* bzip2		
+	* gzip		 
+	* compress  
+	* zip		  
+
+117. And what would be the final file name for each of the following ?
+
+	* bzip2	       	
+	* gzip	   	 
+	* compress  
+	* zip		  
+
+118. And uncompress with :
+
+	* bzip2		
+	* gzip		 
+	* compress  
+	* zip		  
+
+119. How would you archive and compress the above dir 'test' with one cmd 
+     if you used :
+
+        * compress  
+	* gzip     
+	* bzip2   
+
+120. Which of these cmds is used to restore files from a compressed backup?
+
+	a. tar  cvf   test.tar.gz
+	b. tar  xvf   test.tar.gz
+	c. tar  zcvf  test.tar.gz
+	d. tar  zxvf  test.tar.gz
+	e. tar -zxvf  test.tar.gz
+
+121. What is a tarball?
+
+	* Some files compressed with compress or gzip or bzip2
+	* Some files archived with compress or gzip or bzip2
+	* Some files compressed with compress or gzip or bzip2
+	* Some files archived/compressed with compress or gzip or bzip2
+	* Source code of some program files archived/compressed with compress
+	* Source code of some program files archived/compressed with gzip
+	* Source code of some program files archived/compressed with bzip2
+
+122. Consider a comparc called 'test.tar.Z'. 
+     How would you just view its contents? 
+     
+123. Consider a comparc called 'test.tar.bz2'. 
+     How would you just view its contents?
+
+124. Consider a comparc called 'test.tar.gz'. 
+     How would you just view its contents?
+
+125. In 'test.tar.bz2', I wish to just extract a single file called CV. 
+     How would I do that?
+
+126. In 'test.tar.gz', I wish to just extract a single file called CV. 
+     How would I do that?
+
+127. Is there a GUI tool like M$ WinZip in Linux ?  
+
+			================
+			05. Getting Help
+			================
+
+128. How would you access the Linux manual?   
+
+129. How many parts are there to the Linux manual? 
+
+130. How would you see all parts of the manual pertaining to the 'adduser' cmd ?
+
+131. Where are they located?  
+
+132. Are they compressed OR archived/compressed ? 
+
+133. What type of compression ? 
+
+134. The database which the 'whatis' cmd searches is .... 
+
+135. Is it an encrypted indexed database or a flat file DB ?
+
+136. When would you do a rebuild of the 'whatis' database? 
+
+137. What cmd would you use? 
+
+138. Is it a binary or a shell script ? 
+
+139. Can this script help you find the 'whatis' db, just in case you had 
+     forgotten where it was ?
+
+140. Where is the Linux documentation located ? 
+
+141. What is the difference between manual and documentation ? 
+
+142. The database which the apropos cmd searches is 
+
+143. Is the whatis database a file or a binary ? 
+
+144. What is the difference between the 'info' and the 'man' command ?
+
+145. Where are the files stored which the info* command sources ?
+
+                          =========================
+	                  06. Finding and Searching
+                          =========================
+
+146. On creating a file, you can find it immediately with 'locate' cmd. T/F?
+
+147. Explain why ?
+
+148. Then where is this 'locate' database and what is it called ? 
+
+149. Is it an encrypted indexed database or a flat file DB ?
+
+150. Is the updatedb cmd an actual binary ? 
+
+151. The 'which' cmd is used to locate files of what type ? 
+
+152. The 'which' and 'whereis' cmds are quite similar. 
+     Explain the differences, if any.
+
+153. Use the 'find' cmd to track down file - "somefile" ? 
+
+			==================
+			07. Basic Commands
+			==================
+
+154. How would you clear your terminal screen ?
+
+155. How would you make an alias 'a' of the above command ?
+
+156. How would you check all the aliases defined ?
+
+157. How would you check whether your alias 'a' has been defined ?
+
+158. How would you remove this alias 'a' ?
+
+159. How would you log out from your terminal - 3 ways ? 
+
+160. Which cmd shows you the number of your console? 
+
+161. Which cmd is used to examine the type of the file ? 
+
+162. How would 'write' message to another user ?                       
+
+163. How would you prevent another user from writing to your terminal? 
+
+164. What does the 'wall' cmd expand to? 
+
+165. What does it do ? 
+
+166. How would I see all the cmds I had typed in up until now ? 
+
+167. How would I search for a previous command I had typed before ?
+
+168. And then how would I execute it ?
+
+169. Any other faster way ?
+
+170. Differentiate between 'whoami' and 'who am i' ? 
+
+171. This there another command to know which user you are logged in as ?
+
+172. What are environment variables ?
+
+173. Are they always in caps ?
+
+174. Name 3 env vars which will tell you the username you are logged in as ?
+
+175. How would you see these env variables ? 
+
+176. I can use the 'logname' command to check my username. Why use env vars ?
+
+177. How'd you see all those msgs that scroll on-screen when you start Linux ? 
+
+178. Which file is it stored in ? 
+
+179. How would you see the version of the kernel you are using ? 
+
+180. How would you make a bootfloppy using the information above ? 
+
+181. What is mc ? 
+
+182. How would you change from one language to another ? 
+
+183. Which cmd is used to control which daemons start/stop at boottime?  
+
+184. Is there a GUI equivalent ?
+
+185. How many minimum daemons should be enabled by using ntsysv for a 
+     successful bootup? 
+
+186. What are they ? 
+
+187. How would you run a shell script without making it executable? 
+
+188. What does the 'su' cmd expand to ? 
+
+189. Consider a super user currently logged in as user foo. He wishes to use 
+     the adduser cmd and hence has to temporarily become a super user. 
+     He does the following :
+
+	* su 
+	* su -
+	* su  -p
+	* su bar
+	* su - bar
+
+	Explain each of them ?
+
+190. What cmd would you use to search the history for a cmd 'sort'? 
+
+191. How would you know which runlevel you were in? 
+
+192. How would you control which NW services are started/stopped in runlevel 5
+     from CLI? 
+
+193. How would you control which NW services are started/stopped in runlevel 5
+     from the TUI ?
+
+194. How would you control which NW services are started/stopped in runlevel 5 
+     from GUI? 
+                        ===========================
+			08. Working with Text Files
+                        ===========================
+
+195. Can you do a PageUp with the 'more' cmd? 
+
+196. Which cmd is better than 'more' ? 
+
+197. How would you know the number of lines in the file 'somefile'? 
+
+198. How would you search for the word - senor - in the file 'somefile'? 
+
+199. How would you count the number of	'senoras' - in the file 'somefile'? 
+
+200. How would you see the first 10 lines of some file - 'somefile' ? 
+
+201. How would you see the first 5 lines of some file - 'somefile' ? 
+
+202. How would you see the last 10 lines of some file - 'somefile' ? 
+
+203. How would you see the last 5 lines of some file - 'somefile' ? 
+
+204. Which cmd is used to spell check a doc ? 
+
+205. Which cmd numbers a file ? 
+
+206. What does the script* cmd do ?
+
+207. Use pr to print a file with the heading "Sales for 2003", page numbers 
+     and dates, with a line length of 70
+
+208. How would you sort the output of a directory sizewise descending?
+
+                ==========================================
+	        09. Working with Text Files ....More .....
+                ==========================================
+
+209.  Whenever I log in, I want to see a fortune. How ?                           
+                                =================
+				10. Linux Editors
+                                =================
+
+210. Name 3 text editors ?
+
+211. Name 3 GUI editors ?  	  
+
+                              =======================
+                              11-12. Users and Groups
+                              =======================
+
+212. How many fields are there in the /etc/passwd file ? 
+
+213. What are they ? 
+
+214. How many fields are there in the /etc/shadow file ? 
+
+215. What are they ? 
+
+216. How many fields are there in the /etc/group file ? 
+
+217. What are they ? 
+
+218. How many fields are there in the /etc/gshadow file ? 
+
+219. What are they ? 
+
+220. What is the GECOS field ? How is it updated? 
+
+221. What does GECOS expand to ? 
+
+222. What file controls the colors of your files, directories etc?
+
+223. How would you add user 'foo' to group 'accounts' with a single line cmd?
+
+224. What full-screen utility facilitates administering the passwd and its 
+     subsequent shadow file ? Why would you want to use this ?
+
+225. What full-screen utility facilitates administering the group and its 
+     subsequent shadow file ? Why would you want to use this ?
+
+226. What is the difference between the following 2 cmds:
+
+	* userdel foo
+	* userdel -r foo
+
+227. What is the UID/GID of the following users:
+
+	* root 
+	* nobody 
+	* User foo on a freshly installed Linux system 
+
+228. How would you disable password shadowing ? 
+
+229. How would you enable shadowing if it were not enabled at startup? 
+
+230. How would you delete a user completely from your system?  
+
+231. Which file points out the shells installed on your system? 
+
+232. Which field in which file handles password ageing ? 
+
+233. Which field in which file handles password expiration ? 
+
+234. Which field in which file is called the grace period  ? 
+
+235. How would you make 'bar' a member of group 'foo'? 
+
+236. Which cmd will show you the UID of a user ?  
+
+237. And GID ?	
+
+238. bar just typed the	'users' cmd . What does she wants to know ?
+
+239. bar just typed the	'groups' cmd . What does she wants to know ?
+
+240. How would you hand edit the /etc/passwd file ? 
+
+241. Which file is sourced to provide a default home for a user ? 
+
+242. Is 'useradd' a binary or a file ?
+
+243. Which file is sourced to provide default password ageing for a user ? 
+
+244. And what is this default password aging number ?
+
+245. And how many years is that ?
+
+246. Is there any way to lock all users out of the system temporarily? 
+
+247. For a single user 'foo' ?	
+
+248. How would you allow foo to login in without a password ?
+
+249. How would you disable root from logging in ? 
+
+250. How would you check the accuracy of the /etc/passwd file ? 
+
+251. How would you check the accuracy of the /etc/group file ? 
+
+252. Is 'adduser' a file or a binary. 
+
+                        ==================== 
+			13. Users and Groups
+                        ==================== 
+
+253. What operations can be performed on a file that has perms 'rwxr--r--' 
+
+	* Can be read by any user
+	* Can be read by its owner
+	* Can be read by its owner and members of its owning group
+	* Cannot be read
+
+254. How would you change file permissions to r-xr-xr-x	 using Octal ? 
+
+255. How you setuid a file 'abc	 rwxr-xr-x' using Octal and Symbolics ?
+
+256. Below is the home dir of user 'foo' with  file 'somefile' in it ?  
+
+              drwx------  foo  foo  /home/foo 
+              		-rwx-rwx-r-x  foo  foo  somefile
+
+257. Can user 'bar' enter foo's home dir ?  
+
+              drwx-----x  foo  foo  foo 
+              		-rwx-rwx-r-x  foo  foo  somefile
+
+258. Examine the changes above.
+     Now can user 'bar' enter foo's home dir ?  
+
+259. There's a problem. What is it ?
+
+              drwx---r-x  foo  foo  foo 
+              		-rwx-rwx-r-x  foo  foo  somefile
+
+260. Examine the changes above.
+     Now is the above problem solved and now can user 'bar' enter the home dir
+     of user 'foo' ?
+
+261. Can user 'bar' delete the file ?   
+
+              -rwx-rwx-rwx  foo  foo  somefile
+
+262. Examine the above changes.
+     Can 'bar' now delete this file ?
+
+              drwx---rwx  foo  foo  /home/foo 
+              		-rwx-rwx-r-x  foo  foo  somefile
+
+263. Examine the above changes.
+     Can 'bar' now delete file 'somefile' ?
+
+264. Can 'bar' modify the file ?
+
+265. Did you notice any changes to the owner/group of file 'somefile' ?
+
+
+266. The passwd file is not writeable by world users and groups. 
+     How does a user then manage too change his password . Explain.
+
+267. How would you setuid the following file using the octal mode ?
+
+          -rwx-rwx-r-x  root   root   somefile
+
+268. Using symbolic mode ?
+
+269. How would you setgid the following file using the octal mode ?
+
+          -rwx-rwx-r-x  root   root   somefile
+
+270. Using symbolic mode ?
+
+271. How would you set the sticky bit on the foll file using the octal mode ?
+
+          -rwx-rwx-r-x  root   root   somefile
+
+272. Using symbolic mode ?
+
+                           =======================
+			   14. Floppies and CDROMS
+                           =======================
+
+273. What is the standard mountpoint for a CDROM? 
+
+274. What is the name of the device driver file for a CDROM if connected to
+     the 1st IDE interface as slave? 
+
+275. What is the standard symlink for a CDROM device driver file in RHL? 
+
+276. Which cmd is used to create a device driver if it were deleted? 
+
+277. Which file lists all the major and minor numbers of all IDE / SCSI etc 
+
+278. What is the shortest cmd used to access a CDROM? 
+
+279. Which file does it read for more information? 
+
+280. What is the name of the device driver for a single floppy disk system ? 
+
+281. How many fields are there in the /etc/fstab file? 
+
+282. What are they?
+
+                        ===========================
+			15. Process/Environment/JCL
+                        ===========================
+
+283. How would you run the 'updatedb' cmd in the foreground? 
+
+284. Then send it to the background? 
+
+285. Is it running or stopped in the background ? 
+
+286. How would you know ? 
+
+287. So what would you now do ? 
+
+288. How would you bring it in the foreground?
+
+289. How would you kill it ?
+
+290. How would you start the cmd so that it goes into the background and keeps
+     running, altogether? 
+
+291. Name 2 cmds are used to monitor daemons running on your system?  
+
+292. How would you start the 'updatedb' cmd from the cmd line, in the bg,  
+     with highest priority and allow for logging out too, altogether? 
+
+293. If 'updatedb' had already been started, how would you then set its 
+     priority to highest? 
+
+294. Which cmd is used to know what processes are running in the background?  
+
+295. How would you know who all are on the system,logged in,at any given moment? 
+296. How would you know who all are logged in, and doing what, 
+     at any given moment ? 
+
+297. How would you know who is using the CDROM? 
+
+298. Which cmd shows you the process hierarchy tree? 
+
+299. How would you limit a user 'foo' to using just 5 processes with 'ulimit'? 
+
+                =========================================
+		16. Shutting down and Halting your System?
+                =========================================
+
+300. How would you shutdown the system abruptly without warning? 
+
+301. How would you schedule a shutdown after 20 mins?
+
+302. Another way to do a reboot? 
+
+303. Another way to do a halt? 
+
+304. Which file checks for authorized users who can shutdown the system? 
+
+305. How would then have to call the shutdown cmd? 
+
+                        ======================
+			17. Checking DiskSpace
+                        ======================
+
+306. How would you know how many inodes were free on the /home partition?  
+
+307. How would you check for diskspace on the /usr partition ? 
+
+308. You wished to copy a directory /usr/local/goodies/ onto a floppy. 
+     How would you check the size of this directory and then how would you
+     copy it to a mounted floppy on the standard mount point /mnt/floppy ?
+
+309. How would you see your partition table ? 
+
+310. Does it show 'labels' ?
+
+311. How would you, then, check the label of what the ext3-linux partition - 
+     /dev/hda3 - is ? 
+
+                        ==========================
+			18-19. Shells and Browsers
+                        ==========================
+
+312. What do the linux shells - sh, bash and csh expand to ?  
+
+313. Name one Linux text browser and one GUI one?  
+
+314. Name one Linux Email Client and one GUI one?  
+
+315. Name one Linux File Explorer and Two GUI ones ?
+
+316. How would you see the contents of a floppy with mtools? 
+
+317. Copy a file 'abc to a floppy using mtools ? 
+
+318. The config file for mtools is ? 
+
+319. How many mtools cmds are there? 
+
+                        =============================
+			22. Sound and Graphic/Viewers
+                        =============================
+
+320. How do I start X window GUI in Linux ?
+
+321. It does not start. What could be the problem ?
+
+322. How do I start xfs permanently ?
+
+323. How do I start xfs temporarily ?
+
+324. Why would you want to do that - start xfs temporarily, that is ?
+
+325. Which are the 2 default DE's in Linux ?
+
+326. How would I start the one _I_ wanted ?
+
+327. I hate searching the menus for an option to click. 
+     What do I have to know ?
+
+328. How would I open a Terminal Window in GUI ?
+
+329. Are there other terminal window programs ? [Name 2]
+
+330. 3 ways to exit from X and back to the CLI prompt ? 
+
+331. How would I play music in TUI mode ?
+
+332. How would I play music in GUI mode ?
+
+333. How would I watch movies in TUI mode ?
+
+334. How would I watch movies in GUI mode ?
+
+335. What is the winamp of Linux ?
+
+336. Sound is full on the players, but still no sound. Why ? 
+
+337. How would I view a PDF file ?
+
+338. What is the paintbrush of Linux ?
+
+339. What is the 'Windows Explorer' of Linux ? Name 2
+
+340. I have a jpg file. How do I view it ?
+
+341. I have a many jpg files. How do I view it like a slideshow aka ACDC or
+     IrfanView ?
+
+342. What is a .png file ?
+
+343. What is the Photoshop of Linux ? 
+
+344. How would I see all the Hardware installed in my system ?
+
+============================================
+Jitendra More
+OculusIT
+9833550438
+
+==========================================

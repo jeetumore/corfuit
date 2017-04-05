@@ -1,0 +1,956 @@
+                         ======================
+                         The Linux Boot Process   LDUP :12.Mar.2k4 Fri
+			         LBP
+			     by JItendra More
+			       59-Steps
+			 ======================
+                                 ======
+                                 Part I
+				 ======
+
+ 01. Power On
+
+ 02. ROM - BIOS loaded into RAM auto by the boot code at the start of ROM 
+           [bootstrap]         
+     Purpose of BIOS : Load the OS - any/some OS
+     
+ 03. POST - HW Inventory - Int 19H
+ 
+ 04. CMOS - [Current bootable devices]
+ 
+ 05. BIOS loads/starts [boots] whatever it finds in the first Sector [Sect 1] 
+     of HDD into RAM i.e. [cylinder 0, head 0, sector 1 of a hard disk]
+     - This first Sector is aka the MBR [on Windows-based systems]
+        Note: There is only one MBR per HDD, obviously !!
+
+        [Remember!!: In fdisk -l, we had seen one sector is 512 bytes]
+
+ 06. What is this MBR ?
+
+  Int 13 fn 8  --> "Get drive parameters"   
+  Int 13 fn 2 --> "Read sectors from drive" 
+
+             0x228
+    <=========x=================== 512 bytes ========================>
+                         |                  | 
+    <-----446 bytes ---->| <--PT -64 bytes->| < Magic no 2 bytes--->
+          BS             |         PT       |      Magic #
+                         |                  |
+    <============================ 512 bytes ========================>
+                     M         B           R
+	 
+    <------ BS --------->                     [ fdisk /mbr ]
+
+    DNF: Backing up the MBR to floppy with dd
+
+ 1. ntldr +                   hda1 A [Active]    ok [first slice]
+    CHS# of Win Kernel                      
+     [KRNL386.EXE]
+
+    BootLoader for Linux kernel
+
+    "1st stage BL" or IPL [Initial Program Loader]
+
+ 2. LILO:          /etc/lilo.conf                           
+    [/boot/boot.b] [binary format]                          
+    CHS# a. /boot/boot.b                hda2 extended  ok
+         b. /boot/message                    hda5  /boot
+         c. /boot/map                        hda6  /home
+         d. /boot/initrd-2.4.20-8.img        hda7  swap
+                                             hda8  /
+                                             hda9  /tmp
+                                             hda10 /var
+                                             hda11 /usr
+
+ 07. During installation, when the Linux kernel is being installed, its 
+     exact size and location [CHS] on the HDD is stored in /boot/map 
+     in the /boot partition. 
+     
+     By that we mean, the exact CHS no on the HDD of where it installed 
+     /boot/vmlinuz-2.4.20-8  
+
+     This is the address of the Linux kernel on the HDD 
+
+     Let's say this address is # 0x1234
+
+            /boot/map - Name / Location of Kernel
+             =======================================
+             | CHS Number | /boot/vmlinuz-2.4.20-8 |
+             | # 0x1234   |                        |
+             =======================================
+
+     It also puts a per-system-unique signature in the first 4 bytes of the 
+     MSDOS master boot record, at offset 0x228.
+     
+ 08. Continuing from 05, BIOS now....
+ 
+       - Examines the PT from this MBR to see where the AP is
+       
+       - Then goes to the AP
+       
+       - Loads whatever it finds in the first Sector of the AP [aka BS]
+       
+         Note: Every Partition on a HDD has a BS [First Sec] where one can put 
+	       the BL 
+	       
+       - In our case here, the first Sector of the AP is also the BS of the MBR
+       
+       - Bcos at install time, we had chosen to install the BL [LILO] 
+         in the MBR
+	 
+         Hence, the BL is NOW in the BS of AP which here is also the MBR
+ 
+ 09. BIOS then loads/executes [boots/runs] this first stage BL - which is 
+     LILO [i.e /boot/boot.b] which is in the BS of the MBR and put there
+     at install time 
+     
+     AND NOT 
+     
+     /boot/boot.b from the /boot partition 
+     
+     and Transfers control to the it
+   
+     This is called the 1st stage of bootloading
+     
+ 10. This first-stage BL has but one purpose in life : 
+ 
+                   To load the 2nd stage BL.
+ 
+ 11. Makes BIOS calls - Int 13 fn 8  --> "Get drive parameters" and - 
+                        Int 13 fn 2 --> "Read sectors from drive" - 
+     which returns the disk geometry in 24-bit address format upto the 
+     1024 cylinder limit. 
+     
+     Since you have enabled the LBA mode, 64-bit address format is used and
+     instead of the CHS way, BIOS reads the disk by numbering the sectors
+     from 1,2,3... etc
+     
+     The requested info from this BIOS call is stored by the BIOS in the first 
+     page of memory ( < 4k ) 
+     
+ 12  The first-stage loader then requests the BIOS for an Int 13 fn 2, gives it
+     the CHS # of the /boot/boot.map file
+
+     Now the BL speaks CHS and the BIOS speaks 24-bit addresses.
+
+     It is LBA which allows the BIOS to act as a speaker of both, CHS and
+     Linear Sector Addressing - using 64-bit addresses - Translator
+     
+ 13  BIOS loads this 2nd stage BL - from the CHS no supplied by the 1st stage 
+
+ 14. The 2nd-stage BL now loads the contents of the balance of the BS 
+     into the RAM 
+   
+     And what is that ?
+
+     /etc/lilo.conf 
+
+     Not the file lilo.conf in dir /etc 
+
+     but the contents of the BS - which is the same file - but in binary form 
+     and was put there by the installer 
+
+ 15. The 2nd stage BL now examines this binary-format-BS which contains 
+     "lilo.conf" and follows the instructions given there !!
+
+     It requests BIOS for an Int 13h and gives it the CHS # of the 
+     /boot/message file which BIOS promptly fetches and the 2nd stage BL 
+     executes - This is the splash screen
+
+ 16 The 2nd stage BL then executes the instructions it got from the BS
+    after the 1st stage had loaded it, and executes those instructions
+
+     /etc/lilo.conf
+     ==============
+     prompt                    <--------- Display labels 
+                                          or present lilo prompt so user can 
+					  interact with lilo
+     timeout=50                <--------- In decisecs 
+     default=linux             <--------- What to do after timeout
+                                          Default image to boot
+     boot=/dev/hda             <--------- Where to install the 1st stage BL
+                                          or IPL when you do a /sbin/lilo -v
+					  Here, in the BS of the MBR of Primary
+					  Master HDD
+					  To install in the MBR,specify /dev/hda
+     map=/boot/map             <--------- Location of map file which contains
+                                          Size and location of kernel
+     install=/boot/boot.b      <--------- Location of the 2nd Stage BL       
+
+     message=/boot/message     <--------- Splash Screen 
+     lba32
+     image=/boot/vmlinuz-2.4.20-8 <------ Big Boss - The Linux kernel
+           label=linux            <------ An unscary word for the kernel 
+	   initrd=/boot/initrd-2.4.20-8.img <--- Image of support modules
+	   read-only
+	   append="hdc=ide-scsi root=LABEL=/" <--- Parameters LILO will pass to
+                                                   init before it starts
+     other=/dev/hda1                               Another OS
+	   optional
+	   label=DOS
+Errors 
+======
+The 'LILO' prompt itself can be used to help diagnose boot related errors. 
+The number of letters presented at the LILO prompt can indicate the success
+or failure of the boot loader. 
+
+   L = First stage boot loaded and started. Usually indicates disk problems 
+       or invalid options in /etc/lilo.conf. 
+  LI = Second stage boot loaded from /boot, but /etc/lilo.conf has invalid 
+       parameters or /boot/boot.b was moved without re-running /sbin/lilo. 
+ LIL = Second stage loader started, but the descriptor table can't be 
+       loaded due to a bad disk or invalid parms in /etc/lilo.conf. 
+LIL? = Second stage loaded at an incorrect address because of invalid 
+       parms in /etc/lilo.conf or /boot/boot.b was moved without 
+       re-running /sbin/lilo. 
+LIL- = Descriptor table is corrupt. Caused by invalid parms in 
+       /etc/lilo.conf or /boot/boot.b was moved without re-running 
+       /sbin/lilo. 
+LILO = All of LILO loaded correctly. 
+
+
+ 17. After timing out AND IF the default image is the Linux kernel, and IT IS 
+     in the case above, the 2nd stage boot loader - /boot/boot.b - 
+     loads the Linux kernel in RAM
+
+ 18. Now what is a BootLoader ?  
+ 
+     BootLoaders load "kernel images" into mem and hand control of the CPU 
+     over to the newly loaded kernel [/boot/vmlinuz-2.4.20.8]
+
+     To make your new kernel work, you must tell the BL about the kernel
+
+     Nearly all BLs use and understand CHS numbers.
+     
+     [BIOS can now understand CHS nos too, bcos of LBA]
+
+ 19. Now the 2nd-stage wishes to load the kernel, as instructed by the 
+     binary-format lilo.conf after timing out or whatever the user chooses
+
+     But there's a problem !!
+
+         The Linux kernel is on the HDD !!
+
+	 In /boot to be precise !!
+
+     And the 2nd-stage LILO BL has no idea how to access the HDD
+
+     Why ?
+
+     The HDD drivers - /dev/hda... are in /dev on the HDD
+
+     and to access it the 2nd stage BL requires the file /dev/hda 
+     which once again is itself on the HDD !!
+ 
+     Hen-and-Egg situation !!
+
+ 20 The 2nd stage BL has no choice but to use the BIOS as its HDD device 
+    driver to access the HDD at boot time. 
+    
+    After all that's where the big BOSS is - 
+              The Linux Kernel [/boot/vmlinuz-2.4.20-8] !!
+
+ 21. The 2nd stage BL once again requests BIOS - Int 13h fn 2 - and hands it 
+     the CHS # of the /boot/map file, which BIOS loads
+
+ 22. The 2nd stage loader now examines this /boot/map and extracts the 
+     CHS # inside it - which was put there by the BL installer - anaconda -
+     and /sbin/lilo - and requests BIOS once more to load whatever is there
+     in that CHS # address
+     
+ 23  BIOS then loads the Linux kernel /boot/vmlinuz-2.4.20-8 into the RAM
+     and hands it to the 2nd stage BL
+    
+ 24  The 2nd stage BL uncomptars this file and fills the memory with kernel 
+     mem structures which can be seen in the /proc virtual file system 
+
+     The Engine Of The Car Is Ready And Running !! 
+
+     The Linux OS is ready and running !! Kernel Land is ready !!
+
+     BUT WE FORGOT TO MAKE THE CAR PROPER ITSELF !! No Userland !!
+
+     How do we drive this car if there is no seat, steering wheel. Nothing.
+     Just an engine !!
+
+                  To Part II  --------->
+
+                              Miscellaneous but critical
+			      ==========================
+                              System.map - Error Diagnostic Translation File 
+			                   or Kernel Symbol [vars/fns] Table
+					   or Kernel System Maps
+					   Read by klogd* for debugging 
+					   klogd* reads /proc/kmsg
+                              boot.0300 -|------- Stock MBR backup - IDE 
+			                   before installing Linux 
+                              boot.0800 -|-------  -- do --        - SCSI
+			                   before installing Linux 
+
+/sbin/lilo
+==========
+What does /sbin/lilo do : 1. Reinstalls LILO - The 1st stage BL in BS of MBR 
+                          2. Examines /etc/lilo.conf and iff no errors then
+                             compiles [ie converts to binary] and installs this
+                             in the BS of the MBR near LILO
+[map installer]           3. Re-creates the map file - /boot/map - by examining
+                             /etc/lilo.conf for location of kernel
+                          4. Rewrites the entry at 0x228                       
+                             
+
+Now we have : LILO           --> BootLoader
+             /sbin/lilo      --> Map Installer
+	     /etc/lilo.conf  --> Config File to customize LILO - the BL
+
+		        =============================
+                        Part II /sbin/init takes over
+		        =============================
+
+  25 Now that the Linux Kernel is in the RAM, and is much more powerful
+     and immensely larger than the 2nd stage BL, it takes over total control
+     from it [i.e. boot.b]  and makes yet another BIOS call Int 13h fn 2 for 
+     the file /boot/initrd-2.4.20-8.img
+   
+  26 It uncompresses it in RAM and creates a mini-FS as can be seen if
+     we look inside the image 
+
+     Since this image file is gzip'd :
+
+     # cp /boot/initrd-2.4.20-8.img /tmp  - Let's play with a safe copy 
+     # cd /tmp
+     # mv initrd-2.4.20-8.img initrd-2.4.20-8.img.gz - gunzip need extn
+     # gunzip initrd-2.4.20-8.img.gz
+     # mount -o loop initrd-2.4.20-8.img /win
+     # cd /win
+     # ls
+
+      Here is a listing of the files of this initrd image:
+
+      .
+      |-- bin
+      |   |-- insmod
+      |   |-- modprobe -> /sbin/nash
+      |   `-- nash
+      |-- dev
+      |   |-- console
+      |   |-- null
+      |   |-- ram
+      |   |-- systty
+      |   |-- tty1
+      |   |-- tty2
+      |   |-- tty3
+      |   `-- tty4
+      |-- etc
+      |-- lib
+      |   |-- ext3.o
+      |   `-- jbd.o
+      |-- linuxrc
+      |-- loopfs
+      |-- proc
+      |-- sbin -> bin
+      `-- sysroot
+
+      8 directories, 15 files
+
+       The following is from /usr/src/linux-2.4/Documentation/initrd.txt
+ 
+       When using initrd, the system typically boots as follows:
+ 
+       The kernel converts initrd into a "normal" RAM disk and frees the
+       memory used by initrd
+       
+       initrd is mounted read-write as root
+
+       The linuxrc script is executed (this can be any valid executable, 
+       including  shell scripts; it is run with uid 0 and can do basically 
+       everything  init can do)
+       
+       linuxrc mounts the "real" root file system
+
+       linuxrc places the root file system at the root directory using the
+       pivot_root system call - on /initrd dir
+
+       The usual boot sequence (e.g. invocation of /sbin/init) is performed
+       on the root file system
+
+       The initrd file system is removed
+ 
+       linuxrc script
+       ==============
+       #!/bin/nash
+
+       echo "Loading jbd.o module"
+       insmod /lib/jbd.o 
+       echo "Loading ext3.o module"
+       insmod /lib/ext3.o 
+       echo Mounting /proc filesystem
+       mount -t proc /proc /proc
+       echo Creating block devices
+       mkdevices /dev
+       echo Creating root device
+       mkrootdev /dev/root
+       echo 0x0100 > /proc/sys/kernel/real-root-dev
+       echo Mounting root filesystem
+       mount -o defaults --ro -t ext3 /dev/root /sysroot
+       pivot_root /sysroot /sysroot/initrd
+       umount /initrd/proc
+
+       As you can see it loads the necessary drivers to access the filesystem 
+       (remember that until the filesystem drivers are loaded, you only have 
+       access to the initrd and vmlinuz). After the HDD drivers you see the 
+       filesystem drivers loaded (ext3). 
+       
+       Then it takes care of some maintenance tasks: 
+       
+                set up /proc
+		sets the root device
+		transfers control to the root device.
+
+        Now it calls /sbin/init. 
+	
+  27 The Userland part is Linux starts
+ 
+      Note that the HDD driver is available now and the kernel
+      loads the /sbin/init* program into RAM
+
+      The Userland Part of Linux is now started by the /sbin/init daemon
+
+  28  /sbin/init* examines /etc/inittab
+
+      =======================================================================
+        /etc/inittab
+	============
+        id:3:initdefault:
+
+        # System initialization.
+        si::sysinit:/etc/rc.d/rc.sysinit
+
+        l0:0:wait:/etc/rc.d/rc 0
+        l1:1:wait:/etc/rc.d/rc 1
+        l2:2:wait:/etc/rc.d/rc 2
+        l3:3:wait:/etc/rc.d/rc 3
+        l4:4:wait:/etc/rc.d/rc 4
+        l5:5:wait:/etc/rc.d/rc 5
+        l6:6:wait:/etc/rc.d/rc 6
+        ls:S:wait:/etc/rc.d/rc S       <------------------ This line put by me 
+        ~:S:respawn:/sbin/sulogin      <------------------ This line put by me 
+
+        # Trap CTRL-ALT-DELETE
+        ca::ctrlaltdel:/sbin/shutdown -t3 -r now
+
+     pf::powerfail:/sbin/shutdown -f -h +2 "Power Failure; System Shutting Down"
+
+     # If power was restored before the shutdown kicked in, cancel it.
+     pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
+
+        # Run gettys in standard runlevels
+        1:2345:respawn:/sbin/mingetty --noclear tty1
+        2:2345:respawn:/sbin/mingetty tty2
+        3:2345:respawn:/sbin/mingetty tty3
+        4:2345:respawn:/sbin/mingetty tty4
+        5:2345:respawn:/sbin/mingetty tty5
+        6:2345:respawn:/sbin/mingetty tty6
+        11:2345:respawn:/sbin/mingetty tty11 
+
+        # Run xdm in runlevel 5
+        x:5:respawn:/etc/X11/prefdm -nodaemon
+      =======================================================================
+
+29  a. Executes /etc/rc.d/rc.sysinit in a subshell of inittab shell
+         rc.sysinit 
+	 ==========
+            calls /etc/sysconfig/network in same env [shell]
+                           sets the hostname and checks whether NW is yes or no
+                           ie checks for existence for NW card
+            calls /etc/init.d/functions script in the same env [i.e rc.sysinit]
+                           sets global umask and path and defines 17 shells fns 
+                           within the rc.sysinit shell env
+
+                          # cat functions | grep \(\)|sort|nl
+
+                                  /etc/init.d/functions
+				  =====================
+                                        1 action() {
+                                        2 checkpid() {
+                                        3 confirm() {
+                                        4 daemon() {
+                                        5 echo_failure() {
+                                        6 echo_passed() {
+                                        7 echo_success() {
+                                        8 echo_warning() {
+                                        9 failure() {
+                                       10 killproc() {
+                                       11 passed() {
+                                       12 pidfileofproc() {
+                                       13 pidofproc() {
+                                       14 status() {
+                                       15 strstr() {
+                                       16 success() {
+                                       17 warning() {
+			   
+30           Displays the "Welcome to Red Hat..." from /etc/redhat-release
+	     
+31           Runs dmesg* which creates /var/log/dmesg and
+        			   display its contents on the screen
+				   
+32           Mounts all local filesystems from /etc/fstab and updates /etc/mtab
+	     Mount simply displays the contents of /etc/mtab
+	     
+         Now /etc/rc.d/rc.sysinit script ends !!
+
+         rc.sysinit : 1. sets the global umask, global PATH, 
+                          sets up the NW'ing subsystem
+                          Basically starts the System Daemons
+
+    b. Back to inittab shell [ See # 33 ]
+             
+
+             Short summary of what rc.sysinit does
+	     =====================================
+             hostname
+             system logs
+             date and time
+             keyboard
+             system font
+             swap partitions
+             usb
+             file system checks
+             mount the filesystems read/write
+ 
+             Some of the flags that rc.sysinit keeps track of
+	     ================================================
+             /fastboot
+             /fsckoptions
+             /forcefsck
+             /halt
+             /poweroff
+             /quota.user
+             /quota.group
+             /.unconfigured
+             /.autofsck
+ 
+             A somewhat more lengthy description on some of what rc.sysinit
+	     does as it brings up the system
+	     ==============================================================
+ 
+             Fix console loglevel
+             Mount /proc (done here so volume labels can work with fsck)
+             Unmount the initrd, if necessary
+             Configure kernel parameters
+             Set the system clock
+             Start up swapping
+             Set the hostname
+             Initialize USB controller and HID devices
+             Possibly update quotas if fsck was run on /
+             Check for arguments passed from kernel
+             Set up pnp 
+             Remount the root filesystem read-write.
+             LVM initialization
+             Clear mtab
+             Remove stale backups
+             Enter root, /proc and (potentially) /proc/bus/usb and devfs
+	                         into mtab.
+             Turn on harddisk optimization
+             The root filesystem is now read-write, so we can now log 
+	                  via syslog() directly..
+             Tweak isapnp settings if needed.
+             Load sound modules iff they need persistent DMA buffers
+             Load modules (for backward compatibility with VARs)
+             Add raid devices
+             Check filesystems
+             Mount all other filesystems (except for NFS and /proc, 
+	             which is already mounted). Non-standard
+             Filesystems are NOT unmounted in single user mode.
+             Check remaining quotas other than root
+             Turn on process accounting
+             Configure machine if necessary.
+             Clean out /etc.
+             Do we need (w|u)tmpx files? We don't set them up, but a 
+	                   sysadmin might...
+             Clean up /var
+             Reset pam_console permissions
+             Clean up utmp/wtmp
+             Delete X locks
+             Delete Postgres sockets
+             Now turn on swap in case we swap to files.
+             Initialize the serial ports.
+             If a SCSI tape has been detected, load the st module
+	             unconditionally since many SCSI tapes don't deal well 
+		     with st being loaded and unloaded
+             Load usb storage here, to match most other things
+             If they asked for ide-scsi, load it
+             Generate a header that defines the boot kernel.
+             Adjust symlinks as necessary in /boot to keep system services
+	             from spewing msgs about mismatched System maps and so on.
+             Now that we have all of our basic modules loaded and the kernel 
+	             going, let's dump the syslog ring somewhere 
+		     so we can find it later
+             Also keep kernel symbols around in case we need them for debugging
+	             i.e from System.map
+             Create the crash indicator flag to warn on crashes, and offer 
+	             fsck with timeout
+             After /sbin/init finishes with /etc/rc.d/rc.sysinit 
+	            (which was specified by the "sysinit" line), it then 
+		    switches to the default runlevel (which is defined by
+		    the "initdefault" line in /etc/inittab).
+
+	     Now it starts with rc
+
+33       rc is executed in a new subshell of /etc/inittab
+             starts and stops the Application NWing daemons
+             runs /etc/rc.d/rc.local which is a symlink in all RLs and is the
+                only script which is run regardless of the RL and is 
+                   S99local in all /etc/rc.d/rc?.d/...] and points to
+		   /etc/rc.d/rc.local
+             goes back to inittab 
+
+          Summary:     rc : starts the 3rd party NW services [User NW services]
+                            Basically starts the Application Daemons
+		            i.e all the * in ntsysv
+
+
+          DNF:         * chkconfig --level 3 gpm off/on 
+                       * chkconfig --add [--del, --list] 3 vadapav off/on 
+	               * ntsysv --level 3
+
+34  c. update is run [bdflush] only in RH8/AS2 and before.
+              Now part of the /sbin/init daemon code as of RH9/Fedora/AS3
+	      
+35  d. shutdown CAD magic keys are set -  You can hack it if you wish
+    
+36  e. poweroff and poweron considerations [start upsd* daemon "ups" initscript
+                                            which reads /etc/sysconfig/ups
+                                            which you will configure for your 
+                                            UPS model]
+					    
+37  f. 6 mingettys are spawned with dev drvs ; all enter sleep state 
+          - EXCEPT one
+	  
+38  g. Iff Runlevel 5, then script "prefdm" is executed..
+        we will do this in class of X 
+	
+    NOW INITTAB IS OVER  
+
+		            ========
+                            Part III
+		            ========
+Note: 			    
+      What is a getty? [RHL has agetty*   [Alternate Linux getty]
+                                mgetty*   [Modem getty]
+				mingetty* [Minimal getty]
+				
+      A getty is is a program that opens a tty port, prompts for a login name,
+      and runs the /bin/login command. It is normally invoked by init.
+     
+      The mingetty daemon is used to listen for virtual consoles 
+      (like the 6 that run by default with your keyboard and monitor)
+      and cannot be used to handle serial lines
+
+      You will need to configure agetty or mgetty to listen on the serial ports,
+      because they are capable of responding to input on physical serial ports.
+
+39  h.  The first mingetty [awake one] loads dev drv /dev/tty1 
+        * execs /etc/issue [Magic cookies Allowed: man uname  / man mingetty]
+        
+40	* mingetty then executes the /bin/login process 
+	  and is then put to sleep state by init 
+	
+41	* /bin/login displays login. You login!
+        
+42	* /bin/login execs /usr/bin/passwd which challenges for passwd from 
+	  user which then does authentication and authorization using PAM
+        
+43	* init then puts the login daemon into sleep state, wakes up
+	  mingetty which now takes over  
+        
+44	* mingetty checks for .hushlogin in $HOME/$USER
+	
+45	     If $HOME/.hushlogin DOES NOT EXISTS 
+	     then it does the foll :
+	     
+46	        - execs lastlog* -u $USER using /var/log/lastlog
+                - execs /etc/motd
+	        - checks users mail, if any, in /var/spool/mail/$USER
+		
+47        * init then wakes /bin/login process 
+        
+48	* mingetty then goes into zombie state and is killed by init
+        
+49	* login then loads /bin/bash as a monitored child process    
+        
+50	* /bin/bash takes over 
+
+51      * and login goes into sleep state
+	
+52      * Execs /etc/profile    Sets system-wide ENV variables Global Profile
+                   
+		   exec /etc/inputrc  Sets keyb mappings  [See stty -a]
+		                      Show Terminal characteristics
+
+                          eg # stty intr ^g   --> Keyboard mapping
+			     # stty -echo     --> Terminal Characteristics
+
+			  eg /etc/inputrc See man bash - /bell-style
+			     ============
+			     set bell-style [audible] [none] [visible]
+			     set disable-completion [off] on
+
+			     "\C-p":"ps aux | grep "
+			     "\C-f":"find . -type f -name "
+			     "\C-l":"ls -altr"
+			     "\C-w":"who | sort | more"
+			     "\C-v":"history | sort -r | less"
+
+			     To do it per-user:
+			     =================
+			     setterm -blength 0 [in per user .bash_profile]
+			     or
+			     xset b off [in GUI]
+	                     [bash -r, --noediting as args in /etc/passwd 
+			                 7th field]
+					 
+
+53             	   exec /etc/profile.d/*.sh [13 shell scripts are executed]
+		              
+                                         1. colorls.sh
+                                         2. glib2.sh
+                                         3. gnome-ssh-askpass.sh
+                                         4. krb5.sh
+                                         5. lam.sh
+                                         6. lang.sh
+                                         7. less.sh
+                                         8. mc.sh
+                                         9. pvm.sh
+                                        10. qt.sh
+                                        11. vim.sh
+                                        12. which-2.sh
+                                        13. xpvm.sh
+			      
+54  i.  * Execs /etc/bashrc - Sets system-wide [Global] aliases/shell functions
+                         sets the users and root's final global umask
+    
+55      *  execs user's personal .bash_profile
+        
+56  execs .bashrc   Run after every command you execute
+        *  Misc :
+        
+57      .bash_history
+58      .bash_logout
+
+59       Finally, at last, the comforting shell login prompt bash !!
+
+                         *****************************
+
+Exercise
+
+Q:  When u press Alt+F2 and login in, which files are executed ?
+
+A:  /etc/issue
+    $HOME/.hushlogin iff not exists
+    =====================================================================
+        * mingetty checks for .hushlogin in $HOME
+	     If $HOME/.hushlogin DOES NOT EXISTS then it does the foll :
+	        - execs lastlog* -u $USER using /var/log/lastlog
+                - execs /etc/motd
+	        - checks users mail, if any
+    =====================================================================
+    /etc/profile
+         /etc/inputrc 
+         /etc/profile.d/*.sh [13 shell scripts executed]
+    /etc/bashrc
+    $HOME/.bash_profile
+
+Misc: $HOME/.bash_history
+      $HOME/.bash_logout
+      $HOME/.bashrc
+  
+                     ==============================
+                     Miscellaneous Points to Note :
+                     ==============================
+
+========================================
+1. LILO to GRUB : Change your bootloader
+========================================
+
+   a. # grub-install /dev/hda
+
+   Config file : /etc/lilo.conf
+
+   If you re-install Win$, you must boot from a boot floppy and do a 'lilo -v'
+
+========================================
+2. GRUB to LILO : Change your bootloader
+========================================
+
+   a. cp /etc/lilo.conf.anaconda /etc/lilo.conf
+
+   b. lilo -v [-t]
+
+   Config file : /boot/grub/grub.conf
+               : /etc/grub.conf [symlink to above]
+
+   If you re-install Win$, no effect on Linux since MBR does not contain
+   code except for a small loader which loads the main grub in 2 stages :
+   
+       /usr/share/grub/i386-redhat/stage1  512 bytes
+       /usr/share/grub/i386-redhat/stage2  104K      
+
+   =========================		  
+3. To put a password in GRUB :
+   =========================		  
+
+           password --md5 $1$JfobY0$HevBan5wGn.C/eteLH/jT1
+
+	   # grub-md5-crypt
+	     >> vashi123
+	     >> vashi123
+	     Now copy / paste this readable but scrambled password in grub.conf
+	     It is the md5 encrypted equivalent of 'vashi123'
+   
+   ==================
+4. To uninstall Linux :
+   ==================
+
+   # fdisk /dev/hda  and delete all Linux partitions
+   # lilo -u         Uninstall lilo
+   or
+   # Boot with Win$ startup disk
+     A:> fdisk /mbr
+     A:> Now reboot and you will have Win$ only
+   
+   ==========================================================		  
+5. LILO : To create a boot floppy if your boot loader is LILO
+   ==========================================================		  
+
+   # uname -r
+     2.4.20-8
+   # mkbootdisk 2.4.20-8
+
+   Obviously the floppy should not be mounted !
+
+Shorter version :
+
+   # mkbootdisk `uname -r`
+
+   ==========================================================		  
+6. GRUB : To create a boot floppy if your boot loader is GRUB
+          Get a working floppy !
+   ==========================================================		  
+
+    1. # mke2fs /dev/fd0
+    2. # mount /mnt/floppy
+    3. # cd /mnt/floppy
+    4. # mkdir -p boot/grub
+    5. # cd /boot/grub/
+    6. # cp stage1 /mnt/floppy/boot/grub/
+    7. # cp stage2 /mnt/floppy/boot/grub/
+    8. # cp grub.conf /mnt/floppy/boot/grub/
+    9. # grub --batch << EOT
+         > root (fd0)
+	 > setup (fd0)
+	 > quit
+	 > EOT
+	 The moment you press Enter, a Boot grub floppy is created. 
+	 Boot with it to test it!
+
+    ===================================
+7.  To Change the splash screen in grub :
+    ===================================
+
+    Using ImageMagick-5.4.7-10 software 
+
+    * /usr/bin/identify -v bear.jpg
+    * /usr/bin/convert
+
+    * /usr/bin/animate
+    * /usr/bin/composite
+    * /usr/bin/conjure
+    * /usr/bin/display
+    * /usr/bin/import
+    * /usr/bin/mogrify
+    * /usr/bin/montage
+
+    Consider bear.jpg
+
+    1. convert -depth 8 -colors 14 -resize 640x480 bear.jpg bear.xpm
+
+       Has to be max 14 colors
+       Has to be 640x480 resolution
+       Has to be xpm format [X Windows System pixmap (color)] 
+                                       See man ImageMagic
+
+    2. Now gzip the bear.xpm
+
+       # gzip bear.xpm -------> bear.xpm.gz
+
+    3. Copy it to /boot/grub/
+
+       # cp bear.xpm.gz /boot/grub/
+
+    4. Configure /boot/grub/grub.conf
+
+       splashimage=(hd0,11)/grub/bear.xpm.gz
+
+    5. reboot 
+
+                           ==========
+                           SOME HACKS 
+			   ==========
+
+   1. # mv /sbin/init /usr/local/sbin/init
+
+        When you reboot, you get kernel panic
+
+      Fix: Pass init=/usr/local/sbin/init to the kernel on LILO startup	
+
+   2. Remove the runlevel from the following line :
+
+        id:3:initdefault:            <--------- Delete 3
+         
+        Asks for RL on startup.	
+
+   3. Remove the dir /initrd and reboot
+
+        When you reboot, you get kernel panic
+
+      Fix: Just create the dir again in Rescue mode 
+        
+   4. Create your own RL 9
+
+      Four Steps :
+     
+      A. Add the following line in /etc /inittab
+      
+	 l0:0:wait:/etc/rc.d/rc 0
+	 l1:1:wait:/etc/rc.d/rc 1
+         ........................
+         l9:9:wait:/etc/rc.d/rc 9
+      
+      B. Change RL from 3 to 9
+      
+         id:9:initdefault:
+
+      C. Add 9 to all the RLs
+
+         # Run gettys in standard runlevels
+         1:23459:respawn:/sbin/mingetty --noclear tty1
+         2:23459:respawn:/sbin/mingetty tty2
+         3:23459:respawn:/sbin/mingetty tty3
+         4:23459:respawn:/sbin/mingetty tty4
+         5:23459:respawn:/sbin/mingetty tty5
+         6:23459:respawn:/sbin/mingetty tty6
+        11:23459:respawn:/sbin/mingetty tty11
+
+      D. Do this :
+
+         # cd /etc/rc.d/
+
+	 # cp -a rc3.d rc9.d
+
+
+              ********************************
+
+
+
+              ********************************
+			  

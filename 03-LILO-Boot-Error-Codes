@@ -1,0 +1,44 @@
+LILO boot error codes
+=====================
+
+When LILO loads itself, it displays the word LILO. Each letter is printed 
+before or after performing some specific action. If LILO fails at some point, 
+the letters printed so far can be used to identify the problem.
+
+Output    Problem
+(nothing) No part of LILO has been loaded. LILO either isn't installed or the 
+          partition on which its boot sector is located isn't active.
+	  
+L         The  first  stage  boot  loader has been loaded and started, but it
+          can't load the second  stage boot loader. The two-digit error codes
+	  indicate the type of problem. 
+	  This condition usually indicates a media failure or a geometry 
+	  mismatch (e.g. bad disk parameters).
+	  
+LI        The first stage boot loader was able to load the second stage boot
+          loader, but has failed to execute it. This can either be caused by a
+	  geometry mismatch or by moving /boot/boot.b without running the map
+	  installer.
+
+LIL       The second stage boot loader has been started, but it can't load the
+          descriptor table from the map file. This is typically caused by a
+	  media failure or by a geometry mismatch.
+	  
+LIL?      The second stage boot loader has been loaded at an incorrect address.
+          This is typically caused by a subtle geometry mismatch or by moving 
+	  /boot/boot.b without running the map installer.
+	  
+LIL-      The descriptor table is corrupt. This can either be caused by a
+          geometry mismatch or by moving /boot/map without running the map
+	  installer.
+
+LILO      All parts of LILO have been successfully loaded.
+
+
+      If the BIOS signals an error when LILO is trying to load a boot image,
+      the  respective  error  code is displayed. These codes range from 0x00
+      through 0xbb. 
+
+      See man lilo for explanation of these codes 
+
+			   

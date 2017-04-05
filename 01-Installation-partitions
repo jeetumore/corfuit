@@ -1,0 +1,32 @@
+				  Installation
+				  ============
+
+			      Name     Label     Type     Minimal        Full
+			      ----     -----     ----     -------        ----
+ ====> Primary Master HDD     hda
+ |
+ |===> Primary Partition      hda1      /boot     ext3      100 MB       100 MB
+ |
+ `===> Extended Partition     hda2
+   |
+   |---> Logical Part. #1     hda5      /home     ext3        -          500 MB
+   |
+   |--->        "      #2     hda6        -       swap      600 MB       600 MB
+   |
+   |--->        "      #3     hda7      /         ext3      474 MB       500 MB
+   |
+   |--->        "      #4     hda8      /tmp      ext3        -         1000 MB
+   |
+   |--->        "      #5     hda9      /var      ext3        -         1000 MB
+   |
+   `--->        "      #6     hda10     /usr      ext3        -         4850 MB
+							   -------	-------
+							   1174 MB	8550 MB
+
+Note: - swap is calculated on 256 MB RAM
+============================================
+Jitendra More
+OculusIT
+9833550438
+
+==========================================
